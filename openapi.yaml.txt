@@ -1,0 +1,232 @@
+openapi: "3.0.1"
+info:
+  title: "FastFood.API"
+  version: "1.0"
+paths:
+  /Categoria/RecuperarPorId/{id}:
+    get:
+      tags:
+        - Categoria
+      summary: "Recupera uma categoria pelo ID"
+      description: "Retorna os dados de uma categoria específica com base no ID fornecido."
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: "UUID da categoria a ser recuperada."
+      responses:
+        "200":
+          description: "Categoria recuperada com sucesso"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  nome:
+                    type: string
+                example:
+                  id: "123e4567-e89b-12d3-a456-426614174000"
+                  nome: "Categoria Exemplo"
+        "400":
+          description: "Requisição inválida - o ID fornecido é inválido"
+        "404":
+          description: "Categoria não encontrada"
+        "500":
+          description: "Erro interno do servidor"
+
+  /Cliente/Incluir:
+    post:
+      tags:
+        - Cliente
+      summary: "Inclui um novo cliente"
+      description: "Adiciona um novo cliente ao sistema com base nos dados fornecidos."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteInsert"
+            example:
+              nome: "João da Silva"
+              cpf: "123.456.789-00"
+              email: "joao.silva@example.com"
+      responses:
+        "201":
+          description: "Cliente criado com sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClienteInsert"
+        "400":
+          description: "Dados inválidos - verifique o formato do CPF e e-mail fornecidos"
+        "409":
+          description: "Conflito - cliente com o CPF já existe"
+        "500":
+          description: "Erro interno do servidor"
+
+  /Cliente/Alterar/{id}:
+    put:
+      tags:
+        - Cliente
+      summary: "Altera um cliente existente"
+      description: "Atualiza as informações de um cliente com base no ID fornecido."
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: "UUID do cliente a ser atualizado."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClienteUpdate"
+            example:
+              nome: "Maria Oliveira"
+              cpf: "987.654.321-00"
+              email: "maria.oliveira@example.com"
+              ativo: true
+      responses:
+        "200":
+          description: "Cliente atualizado com sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClienteUpdate"
+        "400":
+          description: "Dados inválidos - verifique o formato do CPF e e-mail fornecidos"
+        "404":
+          description: "Cliente não encontrado"
+        "500":
+          description: "Erro interno do servidor"
+
+  /Cliente/AtivarInativar/{id}/{status}:
+    patch:
+      tags:
+        - Cliente
+      summary: "Ativa ou inativa um cliente"
+      description: "Atualiza o status de um cliente específico (ativo ou inativo) com base no ID e status fornecidos."
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: "UUID do cliente a ser atualizado."
+        - name: status
+          in: path
+          required: true
+          schema:
+            type: boolean
+          description: "Define se o cliente deve ser ativado (true) ou inativado (false)."
+      responses:
+        "200":
+          description: "Status do cliente atualizado com sucesso"
+        "400":
+          description: "Parâmetros inválidos - verifique o ID e o status fornecidos"
+        "404":
+          description: "Cliente não encontrado"
+        "500":
+          description: "Erro interno do servidor"
+
+  /Pedido/Incluir:
+    post:
+      tags:
+        - Pedido
+      summary: "Inclui um novo pedido"
+      description: "Adiciona um novo pedido ao sistema com os detalhes fornecidos."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PedidoInsert"
+            example:
+              clienteIdentificado: true
+              idCliente: "123e4567-e89b-12d3-a456-426614174000"
+      responses:
+        "201":
+          description: "Pedido criado com sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PedidoInsert"
+        "400":
+          description: "Dados inválidos - verifique se o cliente está identificado corretamente"
+        "500":
+          description: "Erro interno do servidor"
+
+  /Produto/AtivarInativar/{id}/{status}:
+    patch:
+      tags:
+        - Produto
+      summary: "Ativa ou inativa um produto"
+      description: "Atualiza o status de um produto específico (ativo ou inativo) com base no ID e status fornecidos."
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: "UUID do produto a ser atualizado."
+        - name: status
+          in: path
+          required: true
+          schema:
+            type: boolean
+          description: "Define se o produto deve ser ativado (true) ou inativado (false)."
+      responses:
+        "200":
+          description: "Status do produto atualizado com sucesso"
+        "400":
+          description: "Parâmetros inválidos - verifique o ID e o status fornecidos"
+        "404":
+          description: "Produto não encontrado"
+        "500":
+          description: "Erro interno do servidor"
+
+components:
+  schemas:
+    ClienteInsert:
+      type: object
+      properties:
+        nome:
+          type: string
+          nullable: false
+          description: "Nome completo do cliente."
+        cpf:
+          type: string
+          nullable: false
+          description: "CPF do cliente (apenas números, sem formatação)."
+        email:
+          type: string
+          format: email
+          description: "Email do cliente."
+      required:
+        - nome
+        - cpf
+        - email
+    ClienteUpdate:
+      type: object
+      properties:
+        nome:
+          type: string
+        cpf:
+          type: string
+        email:
+          type: string
+        ativo:
+          type: boolean
+          description: "Define se o cliente está ativo ou inativo."
+      additionalProperties: false
