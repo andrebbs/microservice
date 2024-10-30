@@ -1,0 +1,504 @@
+openapi: 3.0.1
+info:
+  title: FastFood.API
+  version: '1.0'
+paths:
+  /Categoria {id}:
+    get:
+      tags:
+        - Categoria
+      summary: Recuperar por id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+  /Categoria:
+    get:
+      tags:
+        - Categoria
+      summary: Recuperar Listagem
+      responses:
+        '200':
+          description: Success
+        
+  /Cliente:
+    post:
+      tags:
+        - Cliente
+      summary: inclusão de clietes 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteInsert'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ClienteInsert'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ClienteInsert'
+      responses:
+        '201':
+          description: create
+  /Cliente/{id}:
+    put:
+      tags:
+        - Cliente
+      summary: Atualizar clientes 
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteUpdate'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ClienteUpdate'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ClienteUpdate'
+      responses:
+        '200':
+          description: Success
+  /Cliente/{id}/{status}:
+    patch:
+      tags:
+        - Cliente
+      summary: Ativar e Inativar
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: path
+          required: true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+  /Cliente/ {cpf}:
+    get:
+      tags:
+        - Cliente
+      summary: Recuperar Por CPF/
+      parameters:
+        - name: cpf
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+  /Cliente/:
+    get:
+      tags:
+        - Cliente
+      summary: Recuperar Listagem
+      responses:
+        '200':
+          description: Success
+  /Pedido/:
+    post:
+      tags:
+        - Pedido
+      summary: Incluir
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoInsert'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PedidoInsert'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PedidoInsert'
+      responses:
+        '200':
+          description: Success
+  /Pedido/{id}/{idStatusPedido}:
+    patch:
+      tags:
+        - Pedido
+      summary: Alterar Status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: idStatusPedido
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+  /Pedido/{id}:
+    get:
+      tags:
+        - Pedido
+      summary: Recuperar Por Id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+  /Pedido/{numeroPedido}:
+    get:
+      tags:
+        - Pedido
+      summary: Recuperar Por Numero Pedido
+      parameters:
+        - name: numeroPedido
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+  /Pedido :
+    get:
+      tags:
+        - Pedido
+      summary: Recuperar istagem/
+      responses:
+        '200':
+          description: Success
+  /Pedido/ {id}:
+    patch:
+      tags:
+        - Pedido
+      summary: Pedido Checkout
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+  /PedidoItem/:
+    post:
+      tags:
+        - PedidoItem
+      summary: Incluir
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoItemInsert'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PedidoItemInsert'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PedidoItemInsert'
+      responses:
+        '200':
+          description: Success
+  /PedidoItem//{id}:
+    put:
+      tags:
+        - PedidoItem
+      summary: Alterar pedido/ atualizar
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoItemUpdate'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PedidoItemUpdate'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PedidoItemUpdate'
+      responses:
+        '200':
+          description: Success
+  /PedidoItem/{id}/{status}:
+    patch:
+      tags:
+        - PedidoItem
+      summary: Ativar Inativar
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: path
+          required: true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+  /PedidoItem/{id}:
+    get:
+      tags:
+        - PedidoItem
+      summary: Recuperar Por Id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+  /PedidoItem:
+    get:
+      tags:
+        - PedidoItem
+      summary: Recuperar Listagem
+      responses:
+        '200':
+          description: Success
+  /PedidoStatus/{id}:
+    get:
+      tags:
+        - PedidoStatus
+      summary: Recuperar Por Id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+  /PedidoStatus:
+    get:
+      tags:
+        - PedidoStatus
+      summary: Recuperar Listagem
+      responses:
+        '200':
+          description: Success
+  /Produto/:
+    post:
+      tags:
+        - Produto
+      summary: Incluir
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProdutoInsert'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProdutoInsert'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProdutoInsert'
+      responses:
+        '200':
+          description: Success
+  /Produto/{id}:
+    put:
+      tags:
+        - Produto
+      summary: Alterar
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProdutoUpdate'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProdutoUpdate'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProdutoUpdate'
+      responses:
+        '200':
+          description: Success
+  /Produto/{id}/{status}:
+    patch:
+      tags:
+        - Produto
+      summary: Ativar Inativar
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: status
+          in: path
+          required: true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+  /Produto {id}:
+    get:
+      tags:
+        - Produto
+      summary: Recuperar Por Id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+  /Produto:
+    get:
+      tags:
+        - Produto
+      summary: Recuperar Listagem
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    ClienteInsert:
+      type: object
+      properties:
+        nome:
+          type: string
+          nullable: true
+        cpf:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ClienteUpdate:
+      type: object
+      properties:
+        nome:
+          type: string
+          nullable: true
+        cpf:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        ativo:
+          type: boolean
+      additionalProperties: false
+    PedidoInsert:
+      type: object
+      properties:
+        clienteIdentificado:
+          type: boolean
+        idCliente:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    PedidoItemInsert:
+      type: object
+      properties:
+        idPedido:
+          type: string
+          format: uuid
+        idProduto:
+          type: string
+          format: uuid
+        quantidade:
+          type: integer
+          format: int32
+      additionalProperties: false
+    PedidoItemUpdate:
+      type: object
+      properties:
+        idPedido:
+          type: string
+          format: uuid
+        idProduto:
+          type: string
+          format: uuid
+        quantidade:
+          type: integer
+          format: int32
+        ativo:
+          type: boolean
+      additionalProperties: false
+    ProdutoInsert:
+      type: object
+      properties:
+        nomeProduto:
+          type: string
+          nullable: true
+        preco:
+          type: number
+          format: float
+        idCategoria:
+          type: string
+          format: uuid
+      additionalProperties: false
+    ProdutoUpdate:
+      type: object
+      properties:
+        nomeProduto:
+          type: string
+          nullable: true
+        preco:
+          type: number
+          format: float
+        idCategoria:
+          type: string
+          format: uuid
+        ativo:
+          type: boolean
+      additionalProperties: false
