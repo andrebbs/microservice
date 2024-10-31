@@ -8,6 +8,7 @@ paths:
       tags:
         - Categoria
       summary: Recuperar por id
+      description: "Retorna os dados de uma categoria específica com base no ID fornecido"
       parameters:
         - name: id
           in: path
@@ -15,42 +16,57 @@ paths:
           schema:
             type: string
             format: uuid
+          description: "UUID da categoria a ser recuperada"
       responses:
         '200':
-          description: Success
+          description: "Categoria recuperada com sucesso"
+        '400':
+          description: "Requisição inválida - UUID fornecido é inválido"
+        '404': 
+          description: "Categoria não encontrada"
+        '500': 
+          description: "Erro interno do servidor"
   /Categoria:
     get:
       tags:
         - Categoria
-      summary: Recuperar Listagem
+      summary: "Recuperar Listagem de Categorias"
+      description: "Recupera uma lista de todas as categorias disponíveis"
       responses:
         '200':
-          description: Success
+          description: "Lista de Categorias recuperada com sucesso"
+        '500': 
+          description: "Erro interno do servidor"
         
   /Cliente:
     post:
       tags:
         - Cliente
-      summary: inclusão de clietes 
+      summary: "inclusão de clientes"
+      description: "Adiciona um novo cliente com as informações fornecidas"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ClienteInsert'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ClienteInsert'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ClienteInsert'
+            example: 
+              nome: "João da Silva"
+              cpf: "123.456.789.10"
+              email: "joao.silva@exemplo.com"
       responses:
         '201':
-          description: create
+          description: "Cliente cadastrado com sucesso"
+        '400': 
+          description: "Dados inválidos- verifique o formato do CPF e e-mail fornecido"
+        '500': 
+          description: "Erro interno do servidor"
   /Cliente/{id}:
     put:
       tags:
         - Cliente
-      summary: Atualizar clientes 
+      summary: "Atualizar clientes"
+      description: "Atualiza as informações de um cliente com base no ID fornecido"
       parameters:
         - name: id
           in: path
@@ -58,25 +74,32 @@ paths:
           schema:
             type: string
             format: uuid
+          description: "UUID do cliente a ser atualizado"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ClienteUpdate'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ClienteUpdate'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ClienteUpdate'
+            example:
+              nome: "Maria da Silva"
+              cpf: "987.654.321.00"
+              email: "maria.silva@exemplo.com"
+              ativo: true
       responses:
         '200':
-          description: Success
+          description: "Dados do cliente atualizado com sucesso"
+        '400': 
+          description: "Dados inválidos- verifique o formato do CPF e e-mail fornecido"
+        '404': 
+          description: "Cliente não encontrado"
+        '500': 
+          description: "Erro interno do servidor"
   /Cliente/{id}/{status}:
     patch:
       tags:
         - Cliente
-      summary: Ativar e Inativar
+      summary: "Ativar e Inativar cliente"
       parameters:
         - name: id
           in: path
@@ -84,60 +107,82 @@ paths:
           schema:
             type: string
             format: uuid
+          description: "UUID do cliente a ser Ativado/Desativado"
         - name: status
           in: path
           required: true
           schema:
             type: boolean
+          description: "Define se o cliente deve ser ativado (true) ou inativado (false)."
       responses:
         '200':
-          description: Success
+          description: "Status do cliente atualizado com sucesso"
+        '400':
+          description: "Requisição inválida - verifique o ID ou Status fornecidos"
+        '404': 
+          description: "Cliente não encontrado"
+        '500': 
+          description: "Erro interno do servidor"
   /Cliente/ {cpf}:
     get:
       tags:
         - Cliente
-      summary: Recuperar Por CPF/
+      summary: "Recuperar Cliente Por CPF"
+      description: "Retorna os dados de um cliente específico com base no CPF fornecido"
       parameters:
         - name: cpf
           in: path
           required: true
           schema:
             type: string
+          description: "CPF do cliente a ser recuperado"
       responses:
         '200':
-          description: Success
+          description: "Cliente recuperado com sucesso"
+        '400':
+          description: "Requisição inválida - verifique o CPF fornecido"
+        '404': 
+          description: "Cliente não encontrado"
+        '500': 
+          description: "Erro interno do servidor"
   /Cliente/:
     get:
       tags:
         - Cliente
-      summary: Recuperar Listagem
+      summary: "Recuperar Listagem de todos clientes"
       responses:
         '200':
-          description: Success
+          description: "Recupera a lista de todos os clientes"
+        '500': 
+          description: "Erro interno do servidor"
   /Pedido/:
     post:
       tags:
         - Pedido
       summary: Incluir
+      description: "Adiciona um novo pedido"
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/PedidoInsert'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/PedidoInsert'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/PedidoInsert'
+            example:
+              clienteIdentificado: true
+              IdCliente: "123e4567-e875-12d3-3245000124"
+              
       responses:
-        '200':
-          description: Success
+        '201': 
+          description: "Pedido criado com sucesso"
+        '404': 
+          description: "Dados inválidos - cliente não encontrado"
+        '500': 
+          description: "Erro interno do servidor"
   /Pedido/{id}/{idStatusPedido}:
     patch:
       tags:
         - Pedido
-      summary: Alterar Status
+      summary: "Alterar Status"
+      description: "Atualiza o status de um pedido com base no ID e no status do pedido"
       parameters:
         - name: id
           in: path
@@ -145,20 +190,29 @@ paths:
           schema:
             type: string
             format: uuid
+          description: "UUID do pedido"
         - name: idStatusPedido
           in: path
           required: true
           schema:
             type: string
             format: uuid
+          description: "UUID do novo status do pedido"
       responses:
         '200':
-          description: Success
+          description: "Status do pedido atualizado com sucesso"
+        '400':
+          description: "Requisição inválida - verifique o parâmetros ID e status fornecidos"
+        '404': 
+          description: "Pedido não encontrado"
+        '500': 
+          description: "Erro interno do servidor"
   /Pedido/{id}:
     get:
       tags:
         - Pedido
-      summary: Recuperar Por Id
+      summary: "Recuperar Por Id"
+      description: "Retorna os dados de um pedido específico com base no ID fornecido"
       parameters:
         - name: id
           in: path
@@ -168,12 +222,13 @@ paths:
             format: uuid
       responses:
         '200':
-          description: Success
+          description: "Pedido recuperado com sucesso"
   /Pedido/{numeroPedido}:
     get:
       tags:
         - Pedido
-      summary: Recuperar Por Numero Pedido
+      summary: "Recuperar Por Numero Pedido"
+      description: "Retorna os dados de um pedido específico com base no número do pedido fornecido"
       parameters:
         - name: numeroPedido
           in: path
@@ -183,20 +238,26 @@ paths:
             format: int32
       responses:
         '200':
-          description: Success
+          description: "Pedido recuperado com sucesso"
+        '404': 
+          description: "Pedido não encontrado"
   /Pedido :
     get:
       tags:
         - Pedido
-      summary: Recuperar istagem/
+      summary: "Recuperar Listagem de todos pedidos"
       responses:
         '200':
-          description: Success
+          description: "Pedidos recuperado com sucesso"
+        '500': 
+          description: "Erro interno do servidor"
+        
   /Pedido/ {id}:
     patch:
       tags:
         - Pedido
       summary: Pedido Checkout
+      description: "Retorna os dados de um pedido específico com base no ID do pedido fornecido"
       parameters:
         - name: id
           in: path
@@ -206,7 +267,7 @@ paths:
             format: uuid
       responses:
         '200':
-          description: Success
+          description: "Pedido recuperado com sucesso"
   /PedidoItem/:
     post:
       tags:
@@ -323,25 +384,25 @@ paths:
       tags:
         - Produto
       summary: Incluir
+      description: "Adiciona um novo produto"
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/ProdutoInsert'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ProdutoInsert'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ProdutoInsert'
       responses:
-        '200':
-          description: Success
+        '201':
+          description: "Produto criado com sucesso"
+        '400':
+          description: "Dados inválidos - verifique os detalhes do produto fornecido"
+        '500': 
+          description: "Erro interno do servidor"
   /Produto/{id}:
     put:
       tags:
         - Produto
       summary: Alterar
+      description: "Atualiza um produto com base no ID do produto"
       parameters:
         - name: id
           in: path
@@ -354,20 +415,21 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProdutoUpdate'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ProdutoUpdate'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ProdutoUpdate'
       responses:
         '200':
-          description: Success
+          description: "Produto alterado com sucesso"
+        '400':
+          description: "Dados inválidos - verifique os detalhes do produto fornecido"
+        '404': 
+          description: "Produto não encontrado"
+        '500': 
+          description: "Erro interno do servidor"
   /Produto/{id}/{status}:
     patch:
       tags:
         - Produto
-      summary: Ativar Inativar
+      summary: "Ativar Inativar"
+      description: "Atualiza o status de um produto com base no ID e no status do produto"
       parameters:
         - name: id
           in: path
@@ -382,12 +444,17 @@ paths:
             type: boolean
       responses:
         '200':
-          description: Success
+          description: "Status do produto atualizado com sucesso"
+        '404': 
+          description: "Produto não encontrado"
+        '500': 
+          description: "Erro interno do servidor"
   /Produto {id}:
     get:
       tags:
         - Produto
-      summary: Recuperar Por Id
+      summary: "Recuperar produto por ID"
+      description: "Recupera produto com base no ID fornecido"
       parameters:
         - name: id
           in: path
@@ -397,15 +464,22 @@ paths:
             format: uuid
       responses:
         '200':
-          description: Success
+          description: " Produto recuperado com sucesso"
+        '404': 
+          description: "Produto não encontrado"
+        '500': 
+          description: "Erro interno do servidor"
   /Produto:
     get:
       tags:
         - Produto
       summary: Recuperar Listagem
+      description: "Recupera uma lista de todas os produtos disponíveis"
       responses:
         '200':
-          description: Success
+          description: "Lista de produtos recuperado com sucesso"
+        '500': 
+          description: "Erro interno do servidor"
 components:
   schemas:
     ClienteInsert:
@@ -480,25 +554,36 @@ components:
         nomeProduto:
           type: string
           nullable: true
+          example: 'Producto A'
         preco:
           type: number
           format: float
+          example: 19.99
         idCategoria:
           type: string
           format: uuid
+          example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
       additionalProperties: false
+      required:
+        - nomeProduto
+        - preco
     ProdutoUpdate:
       type: object
       properties:
         nomeProduto:
           type: string
           nullable: true
+          example: 'Produto A'
         preco:
           type: number
           format: float
+          example: 23.99
         idCategoria:
           type: string
           format: uuid
+          example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
         ativo:
           type: boolean
       additionalProperties: false
+      required:
+        - idCategoria
